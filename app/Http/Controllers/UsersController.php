@@ -34,14 +34,14 @@ class UsersController extends Controller
 
         $user = User::where('email',$request->email)->first();
 
-
-        if(!$user || ! Hash::check($request->password, $user->password)){
-            return ValidationException::withMessages([ 
-                'email'=>['The provided credentials is incorrect'],
-            ]);
+        if(!$user) {
+            return response()->json(['success'=>false, 'message' => 'There is no user register using this email.']);
+         }
+        if(!Hash::check($request->password, $user->password)){
+           return response()->json(['success'=>false, 'message' => 'Passsword you entered is incorrect.']);
         }
 
-        return $user->createToken($request->email)->plainTextToken;
+        return  response()->json(['success'=>true, 'message' => $user->createToken($request->email)->plainTextToken]);
     }
 
     /**
