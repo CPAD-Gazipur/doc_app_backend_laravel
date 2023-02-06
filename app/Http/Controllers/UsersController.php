@@ -57,19 +57,45 @@ class UsersController extends Controller
                 'password'=>'required',
             ]);
 
-        $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'type'=>'user',
-            'password'=>Hash::make($request->password),
-        ]);
+            $user = User::where('email',$request->email)->first();
 
-        $userInfo = UserDetails::create([
-            'user_id'=>$user->id,
-            'status'=>'active',
-        ]);
+            if($user){
+                return response()->json([
+                    'success'  => false,
+                    'message' => 'The email has already been taken.',
+                ],422);
+            }
 
-        return $user;
+            try{
+
+                $user = User::create([
+                    'name'=>$request->name,
+                    'email'=>$request->email,
+                    'type'=>'user',
+                    'password'=>Hash::make($request->password),
+                ]);
+        
+                $userInfo = UserDetails::create([
+                    'user_id'=>$user->id,
+                    'status'=>'active',
+                ]);
+        
+                return response()->json([        
+                    'success'  => true,
+                    'message' => 'Account created succefully.',
+                    'data' => $user,
+                ]);
+            }
+            catch(Exception $exception){
+
+                return response()->json([
+                    'success'  => false,
+                    'message' => $exception->getMessage(),
+                ]);
+            }
+
+
+
     }
 
     /**
