@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Doctor;
 use App\Models\UserDetails;
+use App\Models\Appointments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,12 +25,22 @@ class UsersController extends Controller
         $doctor = User::where('type','doctor')->get();
         $doctorData = Doctor::all();
 
+        /// GET TODAY'S APPOINTMENTS
+        $date = now()->format('F d, Y');
+        $appointments = Appointments::where('date',$date)->first();
+
         foreach ($doctorData as $data) {
             foreach($doctor as $info){
                 if($data['doc_id'] == $info['id']){
                     $data['doctor_name'] = $info['name'];
-                    $data['doctor_profile'] = $info['profile_photo_url'];
+                    $data['doctor_profile'] = $info['profile_photo_url'];  
+
+                    if(isset($appointments) && $appointments['doc_id'] == $info['id']){
+                        $data['appointments'] = $appointments;
+                    }
                 }
+
+                
             }
         }
 
