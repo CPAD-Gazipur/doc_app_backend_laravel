@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Doctor;
+use App\Models\Reviews;
 use App\Models\UserDetails;
 use App\Models\Appointments;
 use Laravel\Sanctum\HasApiTokens;
@@ -73,5 +74,9 @@ class User extends Authenticatable
 
     public function appointments(){
         return $this->hasMany(Appointments::class,'user_id');
+    }
+
+    public function reviews(){
+        return $this->hasMany(Reviews::class,'user_id');
     }
 }
