@@ -84,6 +84,42 @@
                 </div>
 
             </div>
+
+            <!-- Review List -->   
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="row">
+                    <div class="col-md-7 mt-4">
+                        <div class="card">
+                            <div class="card-header my-3 pb-0 px-3">
+                                <h6 class="mb-0">LATEST REVIEWS</h6>
+                            </div>
+                            <div class="card-body pt-4 p-3">
+                                @if(isset($reviews) && !$reviews->isEmpty())
+                                   <ul class="list-group">
+                                        @foreach($reviews as $review)
+                                            @if(isset($review->reviews) && $review->reviews != '')
+                                               <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                                   <div class="d-flex flex-column">
+                                                        <h6 class="mb-3 text-sm">{{ $review->reviewed_by }}</h6>
+                                                        <div class="flex justify-between">
+                                                            <span class="mb-2 text-xs">{{ $review->reviews ?? '-'}}</span>
+                                                            <span class="mb-2 text-xs">{{ $review->created_at->format('h:i:s A | F d, Y') ?? '-' }}</span>
+                                                        </div>
+                                                   </div>                                                   
+                                               </li>
+                                            @endif  
+                                        @endforeach          
+                                   </ul>
+                                @else
+                                   <div class="border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                                        <h6 class="mb-3 text-sm">No Reviews Yet!</h6>
+                                   </div>   
+                                @endif   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

@@ -6,10 +6,10 @@ use App\Models\User;
 use App\Models\Doctor;
 use App\Models\UserDetails;
 use App\Models\Appointments;
+use Exception as GlobalException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class UsersController extends Controller
 {
@@ -37,6 +37,8 @@ class UsersController extends Controller
 
                     if(isset($appointments) && $appointments['doc_id'] == $info['id']){
                         $data['appointments'] = $appointments;
+                    }else{
+                        $data['appointments'] = $date;
                     }
                 }
 
@@ -115,7 +117,7 @@ class UsersController extends Controller
                     'data' => $user,
                 ]);
             }
-            catch(Exception $exception){
+            catch(GlobalException $exception){
 
                 return response()->json([
                     'success'  => false,
