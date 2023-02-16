@@ -37,7 +37,7 @@ class DoctorsController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -48,7 +48,25 @@ class DoctorsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /// STORE APPOINTMET REVIEW & UPDATE STATUS
+        $reviews = new Reviews();
+        $appointments = Appointments::where('id',$request->get('appointment_id'))->first();
+
+        $reviews->user_id = Auth::user()->id;
+        $reviews->doc_id = $request->get('doctor_id');
+        $reviews->ratings = $request->get('ratings');
+        $reviews->reviews = $request->get('reviews');
+        $reviews->reviewed_by = Auth::user()->name;
+        $reviews->status = 'active';
+        $reviews->save();
+
+        $appointments->status = 'complete';
+        $appointments->save();
+
+        return response()->json([
+            'success'=> true, 
+            'message'=> 'The Appoinment has been completed & reviews sucessfully.',
+        ],200);
     }
 
     /**

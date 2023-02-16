@@ -100,7 +100,9 @@
                                             @if(isset($review->reviews) && $review->reviews != '')
                                                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                                                    <div class="d-flex flex-column">
+                                                        
                                                         <h6 class="mb-3 text-sm">{{ $review->reviewed_by }}</h6>
+                                                        
                                                         <div class="flex justify-between">
                                                             <span class="mb-2 text-xs">{{ $review->reviews ?? '-'}}</span>
                                                             <span class="mb-2 text-xs">{{ $review->created_at->format('h:i:s A | F d, Y') ?? '-' }}</span>

@@ -27,7 +27,7 @@ class UsersController extends Controller
 
         /// GET TODAY'S APPOINTMENTS
         $date = now()->format('F d, Y');
-        $appointments = Appointments::where('date',$date)->first();
+        $appointments = Appointments::where('status','upcoming')->where('date',$date)->first();
 
         foreach ($doctorData as $data) {
             foreach($doctor as $info){
@@ -37,8 +37,6 @@ class UsersController extends Controller
 
                     if(isset($appointments) && $appointments['doc_id'] == $info['id']){
                         $data['appointments'] = $appointments;
-                    }else{
-                        $data['appointments'] = $date;
                     }
                 }
 
