@@ -23,6 +23,7 @@ class UsersController extends Controller
         $user = array();
         $user = Auth::user();
         $doctor = User::where('type','doctor')->get();
+        $details = $user->user_details;
         $doctorData = Doctor::all();
 
         /// GET TODAY'S APPOINTMENTS
@@ -45,6 +46,7 @@ class UsersController extends Controller
         }
 
         $user['doctors'] = $doctorData;
+        $user['details'] = $details;
 
         return $user;
     }
