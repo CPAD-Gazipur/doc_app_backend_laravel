@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\UserDetails;
 use App\Models\Appointments;
 use Exception as GlobalException;
+use Generator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -149,6 +150,31 @@ class UsersController extends Controller
     {
         //
     }
+
+
+        /**
+     * Store a favorite doctor List.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeFavoriteDoctor(Request $request)
+    {
+        /// STORE FAVORITE DOCTOR LIST
+        $saveFavortie = UserDetails::where('user_id',Auth::user()->id)->first();
+
+        $doctorList = json_encode($request->get('favoriteDoctorList'));
+
+        $saveFavortie->favorite = $doctorList;
+        $saveFavortie->save();
+
+        return response()->json([
+            'success'=> true, 
+            'message'=> 'The favorite doctor list is updated.',
+        ],200);
+    }
+
+
 
     /**
      * Display the specified resource.
