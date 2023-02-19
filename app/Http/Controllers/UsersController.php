@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use SNMP;
+use Generator;
 use App\Models\User;
 use App\Models\Doctor;
+use App\Models\Reviews;
 use App\Models\UserDetails;
 use App\Models\Appointments;
-use Exception as GlobalException;
-use Generator;
 use Illuminate\Http\Request;
+use Exception as GlobalException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -35,15 +37,31 @@ class UsersController extends Controller
             foreach($doctor as $info){
                 if($data['doc_id'] == $info['id']){
                     $data['doctor_name'] = $info['name'];
-                    $data['doctor_profile'] = $info['profile_photo_url'];  
+                    $data['doctor_profile'] = $info['profile_photo_url']; 
 
                     if(isset($appointments) && $appointments['doc_id'] == $info['id']){
                         $data['appointments'] = $appointments;
                     }
-                }
-
-                
+                }          
             }
+        
+            $reviews = Reviews::where('doc_id',$data->doc_id)->where('status','active')->get();
+            if(isset($reviews)){
+                $counts = count($reviews);
+                $rating = 0;
+                $total = 0;
+                
+                if($counts != 0){
+                    foreach($reviews as $review){
+                        $total += $review['ratings'];
+                    }
+                    $rating = $total / $counts;
+                }else{
+                    $rating = 0.0;
+                }
+            }
+            $data['average_ratings'] = $rating;
+            $data['reviews'] = $reviews;
         }
 
         $user['doctors'] = $doctorData;
@@ -111,6 +129,8 @@ class UsersController extends Controller
                     'user_id'=>$user->id,
                     'status'=>'active',
                 ]);
+
+                // $userInfo->save();
         
                 return response()->json([        
                     'success'  => true,
