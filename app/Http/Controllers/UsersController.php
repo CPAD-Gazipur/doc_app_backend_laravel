@@ -94,8 +94,22 @@ class UsersController extends Controller
         return  response()->json(['success'=>true, 'message' => $user->createToken($request->email)->plainTextToken]);
     }
 
+
     /**
-     * Login
+     * logout
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function logout()
+    {
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
+
+        return  response()->json(['success'=>true, 'message' => 'Logout Successfully.'],200);
+    }
+
+    /**
+     * register
      *
      * @return \Illuminate\Http\Response
      */
